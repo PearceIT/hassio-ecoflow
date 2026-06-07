@@ -162,10 +162,13 @@ class HassioEcoFlowClient:
             self.diagnostics["pd"] = data
             self.device_info_main["model"] = ef.get_model_name(
                 self.product, data["model"])
-            dr.async_get_or_create(
-                config_entry_id=entry.entry_id,
-                **self.device_info_main,
-            )
+            try:
+                dr.async_get_or_create(
+                    config_entry_id=entry.entry_id,
+                    **self.device_info_main,
+                )
+            except Exception:
+                pass
             if self.__extra_connected != ef.has_extra(self.product, data.get("model", None)):
                 self.__extra_connected = not self.__extra_connected
                 if not self.__extra_connected:
@@ -272,7 +275,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     client = HassioEcoFlowClient(hass, entry)
 
     hass.data[DOMAIN][entry.entry_id] = client
-    hass.config_entries.async_setup_platforms(entry, _PLATFORMS)
+    await hass.config_entries.async_forward_entry_setups(entry, _PLATFORMS)
     return True
 
 
