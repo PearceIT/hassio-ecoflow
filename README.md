@@ -5,7 +5,23 @@
 
 # EcoFlow Portable Power Station Integration for Home Assistant
 
+
+
 ####  Used Claude to update it to work with my Delta Pro and HA 2026.6.1 07/06/2026 ####
+
+## Compatibility Note
+This fork fixes compatibility with Home Assistant 2026.x (Core 2026.6.1 tested).
+
+Changes from original:
+- `config_flow.py` — updated `DhcpServiceInfo` import path
+- `__init__.py` — replaced deprecated `async_setup_platforms` with `async_forward_entry_setups`, added race condition fix for device registry
+- `sensor.py` / `number.py` — replaced deprecated unit constants with `UnitOf*` classes
+- `select.py` — replaced deprecated `FREQUENCY_HERTZ` constant
+
+Original integration by vwt12eh8.
+
+
+
 
 This integration uses a local API.
 Therefore, if the devices are not on the same network, they cannot synchronize their status.
