@@ -1,5 +1,5 @@
 {
-  "name": "EcoFlow",
+  "name": "EcoFlow - HACS",
   "render_readme": true,
-  "homeassistant": "2022.7.0"
+  "homeassistant": "2026.2.0"
 }
