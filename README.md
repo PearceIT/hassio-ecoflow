@@ -5,6 +5,8 @@
 
 # EcoFlow Portable Power Station Integration for Home Assistant
 
+####  Used Claude to update it to work with my Delta Pro and HA 2026.6.1 07/06/2026 ####
+
 This integration uses a local API.
 Therefore, if the devices are not on the same network, they cannot synchronize their status.
 
