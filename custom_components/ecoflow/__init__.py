@@ -4,7 +4,7 @@ from typing import Any, Callable, Optional, TypeVar, cast
 import reactivex.operators as ops
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_MAC, Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import event
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.helpers.device_registry import async_get as async_get_dr
@@ -133,6 +133,12 @@ class HassioEcoFlowClient:
 
         self.disconnected = Subject[Optional[int]]()
 
+        # @callback: async_track_point_in_utc_time runs a plain function in the executor,
+        # so this used to fire on a worker thread. It then touched the asyncio stream
+        # (tcp.reconnect -> feed_eof) and called async_write_ha_state off the loop, which
+        # HA 2026 rejects ("Future exception was never retrieved"), leaving entities
+        # marked available with stale values after a disconnect.
+        @callback
         def _disconnected(*args):
             self.__disconnected = None
             self.tcp.reconnect()
